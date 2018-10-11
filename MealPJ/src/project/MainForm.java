@@ -13,14 +13,15 @@ import javax.swing.JPanel;
 public class MainForm extends JFrame implements ActionListener{
 	//private Main M;
 	JButton jbtn1, jbtn2, jbtn3, jbtn4;
-	GridLayout gl;
+	JPanel jpl;
 	
 	public MainForm() {
-		//this.M = m;
-		setBounds(200, 300, 300, 350);
-		gl = new GridLayout(4, 1, 0, 0);
+		setBounds(200, 300, 400, 430);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
-		setLayout(gl);
+		setLayout(null);
+		
+		jpl = new JPanel(new GridLayout(4, 1, 0, 0));
+		jpl.setBounds(0, 15, 400, 350);
 		
 		jbtn1 = new JButton("사용등록");
 		jbtn2 = new JButton("사용자");
@@ -34,10 +35,12 @@ public class MainForm extends JFrame implements ActionListener{
 		jbtn4.addActionListener(this);
 		
 			
-		this.add(jbtn1);
-		this.add(jbtn2);
-		this.add(jbtn3);
-		this.add(jbtn4);
+		jpl.add(jbtn1);
+		jpl.add(jbtn2);
+		jpl.add(jbtn3);
+		jpl.add(jbtn4);
+		
+		this.add(jpl);
 		
 		this.setVisible(true);
 	}

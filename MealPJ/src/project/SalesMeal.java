@@ -4,10 +4,12 @@ import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.util.Date;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenuBar;
@@ -44,7 +46,6 @@ public class SalesMeal extends JFrame {
 		
 		// jp1 end
 		
-		tpane = new JTabbedPane(JTabbedPane.TOP);
 		ii1 = new ImageIcon("src/images/menu_1.png");
 		ii2 = new ImageIcon("src/images/menu_2.png");
 		ii3 = new ImageIcon("src/images/menu_3.png");
@@ -54,13 +55,13 @@ public class SalesMeal extends JFrame {
 		jbtn2 = new JButton(ii2);
 		jbtn3 = new JButton(ii3);
 		jbtn4 = new JButton(ii4);
+	
 		
-		
+		tpane = new JTabbedPane();
 		jp2.add(jbtn1); jp2.add(jbtn2); jp2.add(jbtn3); jp2.add(jbtn4);
-		jp2.setBounds(0, 50, 280, 350);
-		
+		jp2.setBounds(0, 50, 280, 360);
+		tpane.setBounds(0, 50, 280, 360);
 		tpane.addTab("¸Þ´º", jp2);
-		add(tpane);
 		// jp2 end
 		
 		
@@ -72,7 +73,8 @@ public class SalesMeal extends JFrame {
 		t.start();
 		jp3.add(jlb2);
 		// jp3 end
-		add(jp1); add(jp2); add(jp3);
+		
+		add(jp1); add(tpane); add(jp3);
 		
 		setVisible(true);
 		

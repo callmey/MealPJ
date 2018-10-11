@@ -17,16 +17,18 @@ public class MemResister extends JFrame implements ActionListener {
 	JLabel jlb1, jlb2, jlb3, jlb4;
 	JTextField jtf1, jtf2;
 	JPasswordField 	jpf3, jpf4;
-	//private Main M;
+	JPanel jpl;
 
 	
 	public MemResister() {
-		super("MemResister");
-		setBounds(200, 300, 400, 300);
+		super("사원등록");
+		setBounds(200, 300, 450, 370);
 		setDefaultCloseOperation(EXIT_ON_CLOSE); // 종료
-		//M = m;
-		gl = new GridLayout(5, 2, 5, 3);
-		setLayout(gl);
+		setLayout(null);
+		
+		jpl = new JPanel(new GridLayout(5, 2, 5, 3));
+		jpl.setBounds(0, 10, 430, 300);
+		
 		jlb1 = new JLabel("사원번호 : ");
 		jlb2 = new JLabel("사원명 : ");
 		jlb3 = new JLabel("패스워드 : ");
@@ -38,19 +40,18 @@ public class MemResister extends JFrame implements ActionListener {
 		jbtn1 = new JButton("등록");
 		jbtn2 = new JButton("닫기");
 		
+		jpl.add(jlb1);
+		jpl.add(jtf1);
+		jpl.add(jlb2);
+		jpl.add(jtf2);
+		jpl.add(jlb3);
+		jpl.add(jpf3);
+		jpl.add(jlb4);
+		jpl.add(jpf4);
+		jpl.add(jbtn1);
+		jpl.add(jbtn2);
 		
-		this.setLayout(gl);
-		
-		this.add(jlb1);
-		this.add(jtf1);
-		this.add(jlb2);
-		this.add(jtf2);
-		this.add(jlb3);
-		this.add(jpf3);
-		this.add(jlb4);
-		this.add(jpf4);
-		this.add(jbtn1);
-		this.add(jbtn2);
+		this.add(jpl);
 
 		jbtn1.addActionListener(this);
 		jbtn2.addActionListener(this);
