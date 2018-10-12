@@ -2,6 +2,7 @@ package project;
 
 import java.awt.Color;
 import java.awt.GridLayout;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -51,10 +52,26 @@ public class SalesMeal extends JFrame {
 		ii3 = new ImageIcon("src/images/menu_3.png");
 		ii4 = new ImageIcon("src/images/menu_4.png");
 		
-		jbtn1 = new JButton(ii1);
-		jbtn2 = new JButton(ii2);
-		jbtn3 = new JButton(ii3);
-		jbtn4 = new JButton(ii4);
+		Image i1 = ii1.getImage();
+		Image i2 = ii2.getImage();
+		Image i3 = ii3.getImage();
+		Image i4 = ii4.getImage(); // 이미지 추출
+
+		Image ci1 = i1.getScaledInstance(120, 150, Image.SCALE_SMOOTH);
+		Image ci2 = i2.getScaledInstance(120, 150, Image.SCALE_SMOOTH);
+		Image ci3 = i3.getScaledInstance(120, 150, Image.SCALE_SMOOTH);
+		Image ci4 = i4.getScaledInstance(120, 150, Image.SCALE_SMOOTH); // 이미지 크기 변경
+	
+		
+		ImageIcon icon1 = new ImageIcon(ci1);
+		ImageIcon icon2 = new ImageIcon(ci2);
+		ImageIcon icon3 = new ImageIcon(ci3);
+		ImageIcon icon4 = new ImageIcon(ci4); // 변경된 이미지를 ImageIcon 객체에 다시 넣음
+	
+		jbtn1 = new JButton(icon1);
+		jbtn2 = new JButton(icon2);
+		jbtn3 = new JButton(icon3);
+		jbtn4 = new JButton(icon4); // 버튼에 변경된 이미지 넣음
 	
 		
 		tpane = new JTabbedPane();
@@ -74,7 +91,9 @@ public class SalesMeal extends JFrame {
 		jp3.add(jlb2);
 		// jp3 end
 		
-		add(jp1); add(tpane); add(jp3);
+		add(jp1); 
+		add(tpane); // 탭 메뉴에 들어간 컴포넌트들 추가
+		add(jp3);
 		
 		setVisible(true);
 		
