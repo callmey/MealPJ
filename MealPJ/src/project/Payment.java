@@ -1,16 +1,24 @@
 package project;
 
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 
-public class Payment extends JFrame {
+public class Payment extends JFrame implements ActionListener{
+	JButton[] jGridBtn;
 	JButton jbtn1, jbtn2, jbtn3, jbtn4, jbtn5, jbtn6, jbtn7;
 	JButton insert, pay, exit;
 	JPanel jpl1, jpl2, jpl3;
@@ -19,11 +27,19 @@ public class Payment extends JFrame {
 	JTable jTbl;
 	JScrollPane jsp;
 	
+	String query;
+	static Connection conn;
+	
+	static PreparedStatement pstmt = null;
+	static ResultSet rs = null;
+	static StringBuffer sql;
 	
 	Payment() {
 		super("결제");
 		setBounds(200, 300, 1200, 500);
 		setLayout(null);
+		
+		conn = MakeConnection.getConnection();
 		
 		jpl1 = new JPanel();
 		jpl1.setBounds(250, 20, 600, 50);
@@ -39,8 +55,9 @@ public class Payment extends JFrame {
 		jpl2.setBounds(10, 100, 550, 300);
 		jpl2.setLayout(new GridLayout(0,5));
 		
+		//select();
 		
-		for(int i =0; i< jbtn.length; i++) {
+		/*for(int i =0; i< jbtn.length; i++) {
 			jbtn[i] = new JButton();
 			//jbtn[i].setBounds(0,0,50,50);
 		}
@@ -55,7 +72,7 @@ public class Payment extends JFrame {
 		
 		for(int i =0; i<jbtn.length; i++) {
 			jpl2.add(jbtn[i]);
-		}
+		}*/
 		
 		
 		
@@ -104,17 +121,95 @@ public class Payment extends JFrame {
 		pay.setBounds(225, 290, 100, 30);
 		exit = new JButton("닫기");
 		exit.setBounds(330, 290, 100, 30);
+		insert.addActionListener(this);
+		exit.addActionListener(this);
 		
 		jpl3.add(insert); jpl3.add(pay); jpl3.add(exit); 
 		add(jpl2); add(jpl3);
 		setVisible(true);
 	}
 	
+	private void select() {
+		query = "SELECT * FROM MEAL";
+		int count = 0;
+		
+		try {
+			pstmt = conn.prepareStatement(query);
+			while(rs.next()) {
+				rs = pstmt.executeQuery();
+				int maxcount = rs.getInt("maxcount");
+				int todaymeal = rs.getInt("todaymeal");
+				String mealname = rs.getString("mealname");
+				int price = rs.getInt("price");
+				System.out.println(price);
+				if(maxcount > 1 && todaymeal == 1) {
+					System.out.println("조건가능수량" + maxcount);
+					System.out.println("조건오늘" + todaymeal);
+					System.out.println("조건음식이름" + mealname);
+					count++;	
+				}
+				jGridBtn = new JButton[count];
+				for(int i =0; i < count; i++) {
+				jGridBtn[i].setText(mealname + "(" + price + ")");
+				jGridBtn[i].setBounds(0,0,50,50);
+				jpl2.add(jGridBtn[i]);	
+				}
+					
+			} // while end
+			 
+			}catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} finally {
+			try {
+				rs.close();
+				pstmt.close();
+				conn.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}	
+	} // select end 
+	
+	/*private void insert() {	
+		query = "SELECT * FROM MEAL";
+		try {
+			pstmt = conn.prepareStatement(query);
+			while(rs.next()) {
+				rs = pstmt.executeQuery();
+				int maxcount = rs.getInt("maxcount");
+				int todaymeal = rs.getInt("todaymeal");
+				String mealname = rs.getString("mealname");
+				int price = rs.getInt("price");
+				System.out.println(price);
+			}
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+	}*/
 	public static void main(String[] args) {
 		new Payment();	
+		System.out.println("conn : " + conn);
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		Object obj = e.getSource();
+		System.out.println(obj);
+		if(obj == exit) {
+			System.exit(0);
+			System.out.println("종료");
+		}else if(obj == insert) {
+			if(jtf2.getText().equals("0") || !(jtf2.getText().matches("^[0-9]*$")) || jtf2.getText().trim().isEmpty()){
+				JOptionPane.showMessageDialog(null, "수량을 입력해주세요.", "Message", JOptionPane.ERROR_MESSAGE);
+		}else if (obj == pay) {
+			/*if(jtbl. == null) {
+				JOptionPane.showMessageDialog(null, "메뉴를 선택해주세요.", "Message", JOptionPane.ERROR_MESSAGE);
+			}*/
+		}
+	}
+	}
 }
-/*
-class SQL {
-	DBConnection dc = new DBConnection();
-}*/
-}
+

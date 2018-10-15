@@ -22,7 +22,9 @@ public class OrderListData {
 		Connection conn = MakeConnection.getConnection();
 		System.out.println("conn : " + conn);
 		
-		File f = new File("C:\\Users\\soldesk\\Downloads\\정보기술\\정보기술(지급자료)\\정보기술(지급자료 제2과제)\\DataFiles\\orderlist.txt");
+		//File f = new File("C:\\Users\\soldesk\\Downloads\\정보기술\\정보기술(지급자료)\\정보기술(지급자료 제2과제)\\DataFiles\\orderlist.txt");
+		
+		File f = new File("C:\\Users\\재원\\Documents\\정보기술(지급자료)-20181015T115308Z-001\\정보기술(지급자료)\\정보기술(지급자료 제2과제)\\DataFiles\\orderlist.txt");
 		
 		FileInputStream fis = new FileInputStream(f);
 		
@@ -30,7 +32,7 @@ public class OrderListData {
 		BufferedReader br = new BufferedReader(new InputStreamReader(fis,"UTF-8"));
 		
 		String s = null;
-		int orderno = 0;
+		String orderno = null;
 		int cuisineno = 0;
 		int mealno = 0;
 		int memberno = 0;
@@ -39,35 +41,42 @@ public class OrderListData {
 		String orderdate = null;
 		
 		sql = new StringBuffer();
-		sql.append("INSERT INTO ORDERLIST(ORDERNO, CUISINENO, MEALNO, MEMBERNO. ORDERCOUNT, AMOUNT, ORDERDATE) ");
+		sql.append("INSERT INTO ORDERLIST(ORDERNO, CUISINENO, MEALNO, MEMBERNO, ORDERCOUNT, AMOUNT, ORDERDATE) ");
 		sql.append("VALUES (orderno.nextval, ?, ?, ?, ?, ?, ?) ");
 			 
-		/*try {
+		try {
 			pstmt = conn.prepareStatement(sql.toString());
 			while((s=br.readLine()) != null) {
 				String[] s1 = s.split("\t");
-				//System.out.print(s1[0]);
-					memno = s1[0];
-					if(memno.equals("사번"))continue;
-					memname = s1[1];		
-					pw = s1[2];
-			//pstmt = conn.prepareStatement(sql1.toString());
-			//rs = pstmt.executeQuery();
-			//pstmt.setString(1, memno);
-			pstmt.setString(1, memname);
-			pstmt.setString(2, pw);
-			
-			System.out.print("사번" + memno);
-			System.out.println();
-			System.out.print("이름" + memname);
-			System.out.println("이름길이" + memname.length());
-			System.out.println();
-			System.out.print("비밀번호" + pw);
+				orderno = s1[0];
+					if(orderno.equals("순번"))continue;
+				cuisineno = Integer.parseInt(s1[1]);		
+				mealno = Integer.parseInt(s1[2]);
+				memberno = Integer.parseInt(s1[3]);
+				ordercount = Integer.parseInt(s1[4]);
+				amount = Integer.parseInt(s1[5]);
+				orderdate = s1[6];
 	
-			//System.out.println("번호길이" + pw.length());
+				pstmt.setInt(1, cuisineno);
+				pstmt.setInt(2, mealno);
+				pstmt.setInt(3, memberno);
+				pstmt.setInt(4, ordercount);
+				pstmt.setInt(5, amount);
+				pstmt.setString(6, orderdate);
+			
+				
+				System.out.print("음식종류" + cuisineno);
+				System.out.println();
+				System.out.print("음식번호" + mealno);
+				System.out.println("사번" + memberno);
+				System.out.println();
+				System.out.print("주문횟수" + ordercount);
+				System.out.println("결제금액" + amount);
+				System.out.println("주문 일자 : " + orderdate);
+	
 			pstmt.executeUpdate();
-			}*/
-		/*	
+			}
+			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();		
@@ -82,4 +91,4 @@ public class OrderListData {
 		}
 	}
 	
-}*/
+}
