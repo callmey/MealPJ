@@ -9,7 +9,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
-import project.DBConnection;
 
 public class Payment extends JFrame {
 	JButton jbtn1, jbtn2, jbtn3, jbtn4, jbtn5, jbtn6, jbtn7;
@@ -114,8 +113,8 @@ public class Payment extends JFrame {
 	public static void main(String[] args) {
 		new Payment();	
 }
-
+/*
 class SQL {
 	DBConnection dc = new DBConnection();
-}
+}*/
 }
