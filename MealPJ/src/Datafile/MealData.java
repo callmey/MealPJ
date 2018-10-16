@@ -10,7 +10,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import project.MakeConnection;
+
+import DBconnect.MakeConnection;
 
 public class MealData {
 		
@@ -22,8 +23,8 @@ public class MealData {
 			Connection conn = MakeConnection.getConnection();
 			System.out.println("conn : " + conn);
 			
-			//File f = new File("C:\\Users\\soldesk\\Downloads\\정보기술\\정보기술(지급자료)\\정보기술(지급자료 제2과제)\\DataFiles\\meal.txt");
-			File f = new File("C:\\Users\\재원\\Documents\\정보기술(지급자료)-20181015T115308Z-001\\정보기술(지급자료)\\정보기술(지급자료 제2과제)\\DataFiles\\meal.txt");
+			File f = new File("C:\\Users\\soldesk\\Downloads\\정보기술\\정보기술(지급자료)\\정보기술(지급자료 제2과제)\\DataFiles\\meal.txt");
+			//File f = new File("C:\\Users\\재원\\Documents\\정보기술(지급자료)-20181015T115308Z-001\\정보기술(지급자료)\\정보기술(지급자료 제2과제)\\DataFiles\\meal.txt");
 			FileInputStream fis = new FileInputStream(f);
 			
 			FileReader fr = new FileReader(f);
