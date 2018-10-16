@@ -7,6 +7,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -17,8 +18,12 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 
+import DBconnect.GetMenu;
+import DBconnect.MakeConnection;
+
 public class Payment extends JFrame implements ActionListener{
-	JButton[] jGridBtn;
+	ArrayList<JButton> jGridBtn;
+	JButton[] btn;
 	JButton jbtn1, jbtn2, jbtn3, jbtn4, jbtn5, jbtn6, jbtn7;
 	JButton insert, pay, exit;
 	JPanel jpl1, jpl2, jpl3;
@@ -27,14 +32,20 @@ public class Payment extends JFrame implements ActionListener{
 	JTable jTbl;
 	JScrollPane jsp;
 	
+	private int i = 0;
+	private int j = 0;
+	
+	ArrayList<String> arr = null;
+	
 	String query;
+	private int arrsize;
 	static Connection conn;
 	
 	static PreparedStatement pstmt = null;
 	static ResultSet rs = null;
 	static StringBuffer sql;
 	
-	Payment() {
+	public Payment(int cuisineno) {
 		super("결제");
 		setBounds(200, 300, 1200, 500);
 		setLayout(null);
@@ -53,9 +64,8 @@ public class Payment extends JFrame implements ActionListener{
 		
 		jpl2 = new JPanel();
 		jpl2.setBounds(10, 100, 550, 300);
-		jpl2.setLayout(new GridLayout(0,5));
-		
-		//select();
+	
+		select(cuisineno);
 		
 		/*for(int i =0; i< jbtn.length; i++) {
 			jbtn[i] = new JButton();
@@ -129,47 +139,35 @@ public class Payment extends JFrame implements ActionListener{
 		setVisible(true);
 	}
 	
-	private void select() {
-		query = "SELECT * FROM MEAL";
-		int count = 0;
+	public void select(int cuisineno) {
+		arr = new GetMenu().menuButton(cuisineno);
+		arrsize = arr.size()/4; // 한 줄씩 분류하기.
+		int rownum = 0;
+
+		if((arrsize%5)==0) {
+			rownum = arrsize/5;
+		}else if((arrsize%5)==1) {
+			rownum = ((arrsize)/5)+1;
+		}
 		
-		try {
-			pstmt = conn.prepareStatement(query);
-			while(rs.next()) {
-				rs = pstmt.executeQuery();
-				int maxcount = rs.getInt("maxcount");
-				int todaymeal = rs.getInt("todaymeal");
-				String mealname = rs.getString("mealname");
-				int price = rs.getInt("price");
-				System.out.println(price);
-				if(maxcount > 1 && todaymeal == 1) {
-					System.out.println("조건가능수량" + maxcount);
-					System.out.println("조건오늘" + todaymeal);
-					System.out.println("조건음식이름" + mealname);
-					count++;	
-				}
-				jGridBtn = new JButton[count];
-				for(int i =0; i < count; i++) {
-				jGridBtn[i].setText(mealname + "(" + price + ")");
-				jGridBtn[i].setBounds(0,0,50,50);
-				jpl2.add(jGridBtn[i]);	
-				}
-					
-			} // while end
-			 
-			}catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} finally {
-			try {
-				rs.close();
-				pstmt.close();
-				conn.close();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}	
+		jpl2.setLayout(new GridLayout(0,5));
+		
+		btn = new JButton[arrsize];
+		
+		while(i<arr.size()) {
+			String text = arr.get(i+1)+"("+arr.get(i+2)+ ")"; // 줄에서 2번째 음식이름, 줄에서 3번째 가격 정보 
+			btn[j] = new JButton(text);
+			btn[j].setSize(50, 50);
+			btn[j].setHorizontalTextPosition(JButton.CENTER); // 텍스트 수평 가운데 정렬
+			btn[j].setVerticalTextPosition(JButton.CENTER); // 텍스트 수직 가운데 정렬
+			
+			jpl2.add(btn[j]);
+			j++;
+			i+=4;
+		}
+	
+		
+			
 	} // select end 
 	
 	/*private void insert() {	
@@ -190,7 +188,7 @@ public class Payment extends JFrame implements ActionListener{
 		}
 	}*/
 	public static void main(String[] args) {
-		new Payment();	
+		new Payment(2);	
 		System.out.println("conn : " + conn);
 	}
 
