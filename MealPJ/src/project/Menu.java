@@ -18,8 +18,10 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.Timer;
+
+import DBconnect.GetMenu;
 		
-public class SalesMeal extends JFrame {
+public class Menu extends JFrame implements ActionListener{
 	JButton jbtn1, jbtn2, jbtn3, jbtn4;
 	ImageIcon ii1, ii2, ii3, ii4;
 	JMenuBar jmb;
@@ -29,7 +31,7 @@ public class SalesMeal extends JFrame {
 	Date date;
 	JTabbedPane tpane;
 	
-	public SalesMeal() {
+	public Menu() {
 		// TODO Auto-generated constructor stub
 		super("식권 발매 프로그램");
 		setBounds(200, 300, 300, 480); // 전체 창
@@ -97,10 +99,16 @@ public class SalesMeal extends JFrame {
 		
 		setVisible(true);
 		
+		jbtn1.addActionListener(this);		
+		jbtn2.addActionListener(this);		
+		jbtn3.addActionListener(this);		
+		jbtn4.addActionListener(this);		
+		
 	}
+
 	
 	public static void main(String[] args) {
-		new SalesMeal();
+		new Menu();
 	}
 	
 	class TimerAction implements ActionListener {
@@ -115,5 +123,11 @@ public class SalesMeal extends JFrame {
 							+ date.getHours() + "시" + date.getMinutes() +"분" + date.getSeconds() + "초");
 			
 		}
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+		
 	}
 }
