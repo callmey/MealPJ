@@ -4,6 +4,11 @@ import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -19,6 +24,9 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 
 import DBconnect.GetMenu;
@@ -30,21 +38,26 @@ public class Payment extends JFrame implements ActionListener{
 	JButton jbtn1, jbtn2, jbtn3, jbtn4, jbtn5, jbtn6, jbtn7;
 	JButton insert, pay, exit;
 	JPanel jpl1, jpl2, jpl3;
-	JLabel jlb, jlb2, jlb3, jlb4, jlb5;
+	JLabel jlb, jlb2, jlb3, jlb4, jlb5, won;
 	JTextField jtf1, jtf2;
 	JTable jTbl;
 	JScrollPane jsp;
 	ActionListener listener = null;
 	private String[] tabTitle = {"상품번호", "품명", "수량", "금액"};
 	private Object[][] rowData = {};
-	
+	private int sum;
+
 	DefaultTableModel dtModel;
 	ArrayList<String> arr = null;
 		
 	int r = 0; 
 	
 	String query;
-	private int arrsize;
+	private int arrsize = 0;
+	private int i = 0;
+	private int j = 0;
+	private int getNum=0;
+	
 	private String[] clk_menuNo;
 	private int[] clk_menuCount;
 	private String[] clk_menuName;
@@ -99,11 +112,15 @@ public class Payment extends JFrame implements ActionListener{
 		jpl3.setLayout(null);
 		jpl3.setBounds(600, 100, 600, 500);
 		jlb2 = new JLabel();
+		won = new JLabel();
 		jlb3 = new JLabel();
 		
 		jlb2.setText("총결제금액");
 		jlb2.setFont(jlb2.getFont().deriveFont(16.0f));
 		jlb2.setBounds(10, 0, 100, 30);
+		won.setBounds(400, 0, 100, 30);
+		won.setText(null);
+		won.setFont(jlb2.getFont().deriveFont(16.0f));
 		jlb3.setText(" 원");
 		jlb3.setBounds(500, 0, 100, 30);
 		jlb3.setFont(jlb3.getFont().deriveFont(16.0f));
@@ -124,7 +141,7 @@ public class Payment extends JFrame implements ActionListener{
 		jtf2 = new JTextField();
 		jtf2.setBounds(420, 255, 100, 25);
 		
-		jpl3.add(jlb2); jpl3.add(jlb3); jpl3.add(jlb4); jpl3.add(jlb5);
+		jpl3.add(jlb2); jpl3.add(won); jpl3.add(jlb3); jpl3.add(jlb4); jpl3.add(jlb5);
 		jpl3.add(jtf1); jpl3.add(jtf2);
 		
 		insert = new JButton("입력");
@@ -134,18 +151,17 @@ public class Payment extends JFrame implements ActionListener{
 		exit = new JButton("닫기");
 		exit.setBounds(330, 290, 100, 30);
 		insert.addActionListener(this);
+		pay.addActionListener(this);
 		exit.addActionListener(this);
 		
 		jpl3.add(insert); jpl3.add(pay); jpl3.add(exit); 
 		add(jpl2); add(jpl3);
 		setVisible(true);
 		
-		insert.addActionListener(new ActionListener() {
-			
-			@Override
+		insert.addActionListener(new ActionListener() {		
+		
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				int getNum = 0;
 				int i = 0;
 				String[] str = new String[4];
 				
@@ -153,8 +169,8 @@ public class Payment extends JFrame implements ActionListener{
 					JOptionPane.showMessageDialog(null, "수량을 입력해주세요.", "Message", JOptionPane.ERROR_MESSAGE);
 				} 
 				else {
-					// 버튼 클릭 하고 수량 입력 시 table에 추가됨.
-					// 음식이름(가격) 과 일치하면 
+					// textfield의 값과 일치하는 버튼을 찾아서 인덱스를 추출하고
+					// 추출한 인덱스의 정보들을 String 배열로 넣은 후 한 줄 씩 테이블에 추가
 					while(i<arrsize) {
 						if(jtf1.getText().equals(clk_menuName[i])) {
 							getNum = i;
@@ -169,44 +185,23 @@ public class Payment extends JFrame implements ActionListener{
 					str[3] = clk_menuPrice[getNum];
 					
 					
-							/*rowData[r][0] = arr.get(i);*/
-							System.out.println("rne");
-			 /*else if(clk_menuName[n].equals(arr.get(i+1))){ // 음식이름
-							rowData[r][1] = arr.get(i+1);*/
-						 /*else if(String.valueOf(clk_menuCount[j]).equals(arr.get(i+3))) { // 수량
-							dtModel.setValueAt(rowData, r, 2);*/
-						/*} else if(clk_menuPrice[n].equals(arr.get(1+2))){ //가격
-							rowData[r][3] = arr.get(i+2);
-							System.out.println(rowData[r][3]);
-						}
-						}*/
-					}
 					dtModel.addRow(str);
-			/*			
-			clk_menuNo[j] = arr.get(i);
-			clk_menuName[j] = arr.get(i+1);
-			clk_menuPrice[j]= arr.get(i+2);
-			clk_menuCount[j] = Integer.valueOf(arr.get(i+3)); */
-					
-				
-	
-				/*//여러 컬럼을 선택하는 경우와 선택하지 않은 경우를 고려
-				switch(jTbl.getRowCount()) {
-				case 0: 
-					JOptionPane.showMessageDialog(null, "선택된 컬럼이 없습니다.", "Message", JOptionPane.ERROR_MESSAGE);
-					break;
-				case 1:
-					//DefaultTableModel에서 선택한 컬럼의 값들을 가져오기
-					String id = String.valueOf(defaultTableModel.getValueAt(jTable.getSelectedRow(), 0));
-					String name = String.valueOf(defaultTableModel.getValueAt(jTable.getSelectedRow(), 1));
-					int age = Integer.valueOf((String) defaultTableModel.getValueAt(jTable.getSelectedRow(), 2));
-					String addr = String.valueOf(defaultTableModel.getValueAt(jTable.getSelectedRow(), 3));
-				}*/
+					btn[getNum].setEnabled(false); // 테이블 추가 시 메뉴 비활성화
+					sum += Integer.parseInt(str[3]) * Integer.parseInt(jtf2.getText());
+					won.setText(String.valueOf(sum));
+				}
 			}
 		});
 	}
 	
-	
+	public void getRowAt(int row) {
+		String[] result = new String[4];
+		
+		for (int i =0; i<4; i++) {
+			result[i] = String.valueOf(dtModel.getValueAt(row, 4));
+		}
+	 //return result;
+	}
 	
 	public void select(int cuisineno) {
 		arr = new GetMenu().menuButton(cuisineno); // String ArrayList에 음식종류별 모든 정보들을 넣는다.
@@ -226,9 +221,6 @@ public class Payment extends JFrame implements ActionListener{
 		clk_menuName = new String[arrsize];
 		clk_menuNo = new String[arrsize];
 		clk_menuPrice = new String[arrsize];
-
-		int i = 0;
-		int j = 0;
 		
 		while(i<arr.size()) {
 			String text = arr.get(i+1)+"("+arr.get(i+2)+ ")"; // 줄에서 2번째 음식이름, 줄에서 3번째 가격 정보 
@@ -270,9 +262,36 @@ public class Payment extends JFrame implements ActionListener{
 		jTbl.getTableHeader().setReorderingAllowed(false); // 테이블 컬럼 순서 변경 금지.
 		jpl3.add(jsp); 
 		
+		jTbl.addMouseListener(new MouseAdapter() {
+			
+			private int num = 0;
+
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				int point=jTbl.rowAtPoint(e.getPoint()); // 줄의 정보 
+				System.out.println(point);
+				
+				if(e.getClickCount() == 2) { // 클릭 두번 누를 시
+					String str = (String)jTbl.getValueAt(point, 1); // 열 정보 구할 때
+					String q =  (String)jTbl.getValueAt(point, 2);
+					String price = (String)jTbl.getValueAt(point, 3);
+					
+					while(i<arrsize) {
+						if(clk_menuName[i].equals(str)) {
+							getNum = num;
+							break;
+						}
+						i++;
+					}
+					
+					btn[getNum].setEnabled(true); // 버튼 다시 활성화
+					dtModel.removeRow(point);
+					sum -= Integer.parseInt(q)*Integer.parseInt(price); // 총 합계 삭제된 줄 빼기
+					won.setText(String.valueOf(sum));
+				}
+			}
+		});
 	}
-	
-	
 	public static void main(String[] args) {
 		new Payment(2);	
 		System.out.println("conn : " + conn);
@@ -282,14 +301,23 @@ public class Payment extends JFrame implements ActionListener{
 	public void actionPerformed(ActionEvent e) {
 		Object obj = e.getSource();
 		Object source = e.getActionCommand(); // 이 객체에 포함된 String을 가져옴.
-		System.out.println(source);
 		String selected = source.toString();
-		System.out.println(selected);
+		
 		if(obj == exit) {
 			System.exit(0);
 			System.out.println("종료");
+		} else if (obj == pay) {
+			System.out.println(pay);
+			//여러 컬럼을 선택하는 경우와 선택하지 않은 경우를 고려
+			switch(jTbl.getRowCount()) {	
+				case 0:
+					JOptionPane.showMessageDialog(null, "메뉴를 선택해주세요.", "Message", JOptionPane.ERROR_MESSAGE);
+					//System.out.println(jTbl.getSelectedRowCount());
+					break;
+				default : 
+					System.out.println("good");
+			}
 		}
-			
 		for(int num = 0; num<arrsize; num++) {
 			if(selected.equals(clk_menuName[num]+"("+ clk_menuPrice[num]+")")) {
 				jtf1.setText(clk_menuName[num]);
@@ -297,5 +325,7 @@ public class Payment extends JFrame implements ActionListener{
 		}
 	
 	}
+	
+	
 }
 
